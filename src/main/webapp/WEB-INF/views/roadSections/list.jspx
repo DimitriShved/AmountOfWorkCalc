@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:spring="http://www.springframework.org/tags" version="2.0">
+	<jsp:directive.page contentType="text/html;charset=UTF-8" />
+	<jsp:output omit-xml-declaration="yes" />
+
+	<h1>Ведомость устройства дорожной одежды</h1>
+	<br></br>
+	<c:if test="${not empty roadSections}">
+		<table>
+			<thead>
+				<tr>
+					<th>от ПК</th>
+					<th>до ПК</th>
+					<th>Расстояние, м</th>
+					<th>При постройке вновь, м2</th>
+					<th>При уширении, м2</th>
+					<th>При усилении, м2</th>
+					<th>Общая площадь, м2</th>
+				</tr>
+			</thead>
+			<tbody>
+				<c:forEach items="${roadSections}" var="roadSection">
+					<tr>
+						<td>${roadSection.sectionStart}</td>
+						<td>${roadSection.sectionEnd}</td>
+						<td>${roadSection.sectionDistance}</td>
+						<td>${roadSection.newBuildingArea}</td>
+						<td>${roadSection.broadeningArea}</td>
+						<td>${roadSection.reinforcementArea}</td>
+						<td>${roadSection.totalArea}</td>
+					</tr>
+				</c:forEach>
+			</tbody>
+		</table>
+	</c:if>
+</div>

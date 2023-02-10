@@ -8,4 +8,7 @@ public interface RoadSectionService {
 
 	List<RoadSection> findAll();
 
+	RoadSection save(RoadSection roadSection);
+
+	
 }
