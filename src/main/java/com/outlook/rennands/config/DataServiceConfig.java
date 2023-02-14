@@ -2,12 +2,16 @@ package com.outlook.rennands.config;
 
 import java.util.Properties;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
@@ -15,12 +19,21 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.stereotype.Controller;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
 @EnableJpaRepositories(basePackages = { "com.outlook.rennands.repos" })
-@ComponentScan(basePackages = { "com.outlook.rennands" })
+@ComponentScan(basePackages = { "com.outlook.rennands" }, excludeFilters = {
+		@ComponentScan.Filter(type = FilterType.ANNOTATION, classes = { Controller.class, Configuration.class }) })
 public class DataServiceConfig {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(DataServiceConfig.class);
+
+	@PostConstruct
+	public void status() {
+		LOGGER.info("data service config initiated");
+	}
 
 	@Bean
 	public DataSource dataSource() {
@@ -28,7 +41,7 @@ public class DataServiceConfig {
 			EmbeddedDatabaseBuilder dBuilder = new EmbeddedDatabaseBuilder();
 			return dBuilder.setType(EmbeddedDatabaseType.H2).build();
 		} catch (Exception e) {
-			System.out.println("Embedded DataSource bean cannot be created");
+			LOGGER.info("Embedded DataSource bean cannot be created");
 			return null;
 		}
 	}

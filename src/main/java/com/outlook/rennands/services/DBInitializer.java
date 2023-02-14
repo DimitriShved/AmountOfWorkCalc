@@ -1,5 +1,7 @@
 package com.outlook.rennands.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,10 +12,15 @@ import jakarta.annotation.PostConstruct;
 @Service
 public class DBInitializer {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(DBInitializer.class);
+
 	RoadSectionService roadSectionService;
 
 	@PostConstruct
 	public void initDB() {
+
+		LOGGER.info("Initiation of test DB starts");
+
 		RoadSection roadSection = new RoadSection();
 		roadSection.setSectionStart(0);
 		roadSection.setSectionEnd(20);
@@ -63,6 +70,8 @@ public class DBInitializer {
 		roadSection.setReinforcementArea(0);
 		roadSection.setTotalArea(20 * 4.5);
 		roadSectionService.save(roadSection);
+
+		LOGGER.info("Initiation of test DB ends");
 
 	}
 
