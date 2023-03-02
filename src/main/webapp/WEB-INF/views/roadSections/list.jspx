@@ -4,20 +4,29 @@
 	xmlns:spring="http://www.springframework.org/tags" version="2.0">
 	<jsp:directive.page contentType="text/html;charset=UTF-8" />
 	<jsp:output omit-xml-declaration="yes" />
+	
+	<spring:message code="statement_name" var="statementName"/>
+	<spring:message code="section_start" var="sectionStart"/>
+	<spring:message code="section_end" var="sectionEnd"/>
+	<spring:message code="section_distance" var="sectionDistance"/>
+	<spring:message code="new_building_area" var="newBuildingArea"/>
+	<spring:message code="broadening_area" var="broadeningArea"/>
+	<spring:message code="reinforcement_area" var="reinforcementArea"/>
+	<spring:message code="total_area" var="totalArea"/>
 
-	<h1>Ведомость устройства дорожной одежды</h1>
+	<h1>${statementName}</h1>
 	<br></br>
 	<c:if test="${not empty roadSections}">
 		<table>
 			<thead>
 				<tr>
-					<th>от ПК</th>
-					<th>до ПК</th>
-					<th>Расстояние, м</th>
-					<th>При постройке вновь, м2</th>
-					<th>При уширении, м2</th>
-					<th>При усилении, м2</th>
-					<th>Общая площадь, м2</th>
+					<th>${sectionStart}</th>
+					<th>${sectionEnd}</th>
+					<th>${sectionDistance}</th>
+					<th>${newBuildingArea}</th>
+					<th>${broadeningArea}</th>
+					<th>${reinforcementArea}</th>
+					<th>${totalArea}</th>
 				</tr>
 			</thead>
 			<tbody>

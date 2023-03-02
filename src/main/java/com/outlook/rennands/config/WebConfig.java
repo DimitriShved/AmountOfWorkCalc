@@ -1,15 +1,22 @@
 package com.outlook.rennands.config;
 
+import java.time.Duration;
+import java.util.Locale;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.i18n.CookieLocaleResolver;
+import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import jakarta.annotation.PostConstruct;
@@ -26,21 +33,31 @@ public class WebConfig implements WebMvcConfigurer {
 		LOGGER.info("web config initiated");
 	}
 
+	// basic
 	@Override
 	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
 		configurer.enable();
 	}
 
+	// basic
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/resources/**").addResourceLocations("/").setCachePeriod(31556926);
 	}
 
+	// basic
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
 		registry.addViewController("/").setViewName("roadSections/list");
 	}
 
+	// i18n
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		registry.addInterceptor(localeChangeInterceptor());
+	}
+
+	// basic
 	@Bean
 	InternalResourceViewResolver viewResolver() {
 		InternalResourceViewResolver resolver = new InternalResourceViewResolver();
@@ -48,6 +65,33 @@ public class WebConfig implements WebMvcConfigurer {
 		resolver.setSuffix(".jspx");
 		resolver.setRequestContextAttribute("requestContext");
 		return resolver;
+	}
+
+	// i18n
+	@Bean
+	ReloadableResourceBundleMessageSource messageSource() {
+		ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+		messageSource.setBasenames("WEB-INF/i18n/application", "WEB-INF/i18n/messages");
+		messageSource.setDefaultEncoding("UTF-8");
+		messageSource.setFallbackToSystemLocale(false);
+		return messageSource;
+	}
+
+	// i18n
+	@Bean
+	LocaleChangeInterceptor localeChangeInterceptor() {
+		LocaleChangeInterceptor interceptor = new LocaleChangeInterceptor();
+		interceptor.setParamName("lang");
+		return interceptor;
+	}
+
+	// i18n
+	@Bean
+	CookieLocaleResolver localeResolver() {
+		CookieLocaleResolver cookieLocaleResolver = new CookieLocaleResolver("locale");
+		cookieLocaleResolver.setDefaultLocale(new Locale("ru", "RU"));
+		cookieLocaleResolver.setCookieMaxAge(Duration.ofSeconds(3600));
+		return cookieLocaleResolver;
 	}
 
 }
